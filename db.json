@@ -1,0 +1,21 @@
+{
+  "users": [
+    {
+      "username": "dipagantengsekali",
+      "password": "123456",
+      "id": 1
+    }
+  ],
+  "todos": [
+    {
+      "id": 1,
+      "todo": "eat",
+      "userId": 1
+    },
+    {
+      "id": 2,
+      "todo": "sleep",
+      "userId": 1
+    }
+  ]
+}
