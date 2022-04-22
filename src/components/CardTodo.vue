@@ -2,12 +2,14 @@
 import api from "@/api/api";
 import { swalLoading, swalClose } from "@/entities/swal.entity";
 
+//props, get data from parent to child
 const props = defineProps({
   id: Number,
   title: String,
   refresh: Function,
 });
 
+//delete todo
 async function deleteTodo(id) {
   swalLoading();
   await api(`/todos/${id}`, {

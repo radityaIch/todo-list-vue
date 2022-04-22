@@ -7,6 +7,7 @@ import CardTodo from "@/components/CardTodo.vue";
 
 const router = useRouter();
 
+//logout
 function logout() {
   localStorage.removeItem("token");
   router.push("/login");
@@ -35,29 +36,25 @@ const formData = reactive({
   text: "",
 });
 
+//create todo data
 async function createTodo() {
-  if (formData.text !== "") {
-    try {
-      swalLoading();
-      await api("/todos", {
-        method: "POST",
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-        body: {
-          title: formData.text,
-        },
-      });
-      swalClose();
-      swalAlert("success", "Todo List Added!");
-      displayTodo();
-    } catch (err) {
-      swalAlert("error", err.data.message);
-    }
-  } else {
-    swalAlert("warning", "Form cannot empty!");
+  try {
+    swalLoading();
+    await api("/todos", {
+      method: "POST",
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+      body: {
+        title: formData.text,
+      },
+    });
+    swalClose();
+    displayTodo();
+  } catch (err) {
+    swalAlert("error", err.data.message);
   }
-  displayTodo();
+  swalClose();
 }
 </script>
 
