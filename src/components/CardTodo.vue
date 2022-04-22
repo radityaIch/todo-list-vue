@@ -1,5 +1,4 @@
 <script setup>
-import { defineProps } from "vue";
 import api from "@/api/api";
 import { swalLoading, swalClose } from "@/entities/swal.entity";
 
