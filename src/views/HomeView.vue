@@ -1,22 +1,19 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import api from "@/api/api";
-import { swalLoading, swalClose, swalAlert } from "@/entities/swal.entity";
 import CardTodo from "@/components/CardTodo.vue";
+import { swalLoading, swalClose } from "@/entities/swal.entity";
 
 const router = useRouter();
 
-//logout
 function logout() {
   localStorage.removeItem("token");
   router.push("/login");
 }
 
-//store the response
 const todoList = ref([]);
 
-//get the todo data list
 async function displayTodo() {
   swalLoading();
   const response = await api("/todos", {
@@ -25,18 +22,16 @@ async function displayTodo() {
       Authorization: localStorage.getItem("token"),
     },
   });
-
-  //bring the response to inside of ref
   todoList.value = response;
   swalClose();
 }
 displayTodo();
 
+//create todo
 const formData = reactive({
   text: "",
 });
 
-//create todo data
 async function createTodo() {
   try {
     swalLoading();
@@ -49,12 +44,12 @@ async function createTodo() {
         title: formData.text,
       },
     });
-    swalClose();
     displayTodo();
+    swalClose();
+    formData.text = "";
   } catch (err) {
-    swalAlert("error", err.data.message);
+    alert("error");
   }
-  swalClose();
 }
 </script>
 
@@ -81,7 +76,7 @@ async function createTodo() {
                 id="save_button"
                 class="btn btn-primary w-100"
               >
-                Add
+                Save
               </button>
             </div>
           </div>
