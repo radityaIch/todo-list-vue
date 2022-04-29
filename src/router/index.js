@@ -5,23 +5,34 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
-      component: () => import("../views/HomeView.vue"),
+      component: () => import("@/views/HomeView.vue"),
+      beforeEnter: (_, __, next) => {
+        if (localStorage.getItem("token")) next();
+        else next("/login");
+      },
     },
     {
-      path: "/about",
-      name: "about",
-      component: () => import("../views/AboutView.vue"),
+      path: "/edit/:id",
+      name: "edit",
+      component: () => import("@/views/EditView.vue"),
+      beforeEnter: (_, __, next) => {
+        if (localStorage.getItem("token")) next();
+        else next("/login");
+      },
     },
     {
       path: "/login",
       name: "login",
-      component: () => import("../views/LoginView.vue"),
+      component: () => import("@/views/LoginView.vue"),
+      beforeEnter: (_, __, next) => {
+        if (!localStorage.getItem("token")) next();
+        else next("/");
+      },
     },
     {
       path: "/register",
       name: "register",
-      component: () => import("../views/RegisterView.vue"),
+      component: () => import("@/views/RegisterView.vue"),
     },
   ],
 });

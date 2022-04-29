@@ -27,12 +27,21 @@ async function deleteTodo(id) {
   <div :id="props.id" class="card w-100 my-2">
     <div class="card-body d-flex justify-content-between py-2">
       <p class="m-0">{{ props.title }}</p>
-      <button
-        type="button"
-        class="btn-close"
-        aria-label="Close"
-        @click="deleteTodo(props.id)"
-      ></button>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <router-link
+          class="btn btn-info btn-sm text-white"
+          :to="`/edit/${props.id}`"
+        >
+          Edit
+        </router-link>
+        <button
+          class="btn btn-danger btn-sm"
+          type="button"
+          @click="deleteTodo(props.id)"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   </div>
 </template>

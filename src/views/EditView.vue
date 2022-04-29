@@ -1,52 +1,46 @@
 <script setup>
-import { ref, reactive } from "vue";
-import { useRouter } from "vue-router";
+import { reactive } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import api from "@/api/api";
-import CardTodo from "@/components/CardTodo.vue";
 import { swalLoading, swalClose } from "@/entities/swal.entity";
 
+const routes = useRoute();
 const router = useRouter();
 
-function logout() {
-  localStorage.removeItem("token");
-  router.push("/login");
-}
+//store the todo detail data
+const formData = reactive({
+  title: "",
+});
 
-const todoList = ref([]);
-
-async function displayTodo() {
+//get selected todo detail
+async function detailTodo() {
   swalLoading();
-  const response = await api("/todos", {
+  const response = await api(`/todos/${routes.params.id}`, {
     method: "GET",
     headers: {
       Authorization: localStorage.getItem("token"),
     },
   });
-  todoList.value = response;
+  formData.title = response.title;
   swalClose();
 }
-displayTodo();
+detailTodo();
 
-//create todo
-const formData = reactive({
-  text: "",
-});
-
-async function createTodo() {
+//edit todo
+async function editTodo() {
   try {
     swalLoading();
-    await api("/todos", {
-      method: "POST",
+    await api(`/todos/${routes.params.id}`, {
+      method: "PUT",
       headers: {
         Authorization: localStorage.getItem("token"),
       },
       body: {
-        title: formData.text,
+        title: formData.title,
       },
     });
-    displayTodo();
     swalClose();
-    formData.text = "";
+    router.push("/");
   } catch (err) {
     alert("error");
   }
@@ -57,13 +51,13 @@ async function createTodo() {
   <div class="m-auto">
     <div class="container-custom">
       <div class="row">
-        <h5 class="text-center my-4">Simple ToDo List</h5>
+        <h5 class="text-center my-4">Edit ToDo</h5>
 
-        <form @submit.prevent="createTodo">
+        <form @submit.prevent="editTodo">
           <div class="row g-0">
             <div class="col-9">
               <input
-                v-model="formData.text"
+                v-model="formData.title"
                 id="input_field"
                 type="text"
                 class="form-control"
@@ -83,27 +77,14 @@ async function createTodo() {
         </form>
 
         <div class="p-0" id="base_container">
-          <p class="mt-4 mx-2 mb-0 p-0"><small>Upcoming</small></p>
-          <div id="todo_list_container" class="my-1 g-0">
-            <!-- Start Component card -->
-            <CardTodo
-              v-for="data in todoList"
-              :key="data.id"
-              :id="data.id"
-              :title="data.title"
-              :refresh="displayTodo"
-            />
-            <!-- End Component card -->
-          </div>
-
           <div class="col-12 py-4">
-            <button
-              id="logout_button"
+            <router-link
+              to="/"
+              id="back_button"
               class="btn btn-secondary w-100"
-              @click="logout"
             >
-              Log Out
-            </button>
+              Back
+            </router-link>
           </div>
         </div>
       </div>
